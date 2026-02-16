@@ -9,7 +9,7 @@ import { AccesoEntity as AccesoEntity } from '../entities/acceso.entity';
 import { Acceso } from '../../../domain/entities/acceso.entity';
 
 // Interfaz del repositorio (contrato del dominio)
-import { IAccesoRepository } from '../../../domain/repositories/acceso.repository.interface';
+import { IAccesoRepository } from '../../../domain/interfaces/acceso.repository.interface';
 
 @Injectable()
 export class AccesoRepository implements IAccesoRepository {
@@ -21,13 +21,9 @@ export class AccesoRepository implements IAccesoRepository {
 
   async buscarPorUsuario(usuario: string): Promise<Acceso | null> {
 
-  console.log('Usuario recibido:', usuario);
-
   const accesoEntity = await this.accesoRepository.findOne({
     where: { usuario }
   });
-
-  console.log('Resultado BD:', accesoEntity);
 
   if (!accesoEntity) {
     return null;

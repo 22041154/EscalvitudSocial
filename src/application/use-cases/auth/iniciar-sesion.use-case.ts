@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { IAccesoRepository } from '../../../domain/repositories/acceso.repository.interface';
+import { IAccesoRepository } from '../../../domain/interfaces/acceso.repository.interface';
 
 @Injectable()
 export class IniciarSesionUseCase {

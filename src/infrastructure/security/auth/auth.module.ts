@@ -8,8 +8,6 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
-
-    // Módulo que contiene la implementación del repositorio
     AccesoModule,
 
     // Configuración del JWT
