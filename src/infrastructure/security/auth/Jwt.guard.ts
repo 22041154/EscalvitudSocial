@@ -1,21 +1,39 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 
+/**
+ * Este guard verifica que el usuario haya sido autenticado previamente
+ * por el JwtMiddleware.
+ * Este guard solo verifica que request.user exista.
+ */
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  handleRequest(err: any, user: any, info: any, context: ExecutionContext) {
+export class JwtGuard implements CanActivate {
+
+  canActivate(context: ExecutionContext): boolean {
+
+    const request = context.switchToHttp().getRequest();
+
+    const user = request.user;
+
     /*
-    Si ocurrió un error o no hay usuario, significa que:
-    - el token no existe
-    - el token es inválido
-    - el token expiró
+    Si no existe user, significa que:
+    - el middleware no encontró token
+    - el token era inválido
+    - el middleware no se ejecutó
     */
 
-    if (err || !user) {
-      throw new UnauthorizedException('No autorizado. Token inválido o no proporcionado.');
+    if (!user) {
+      throw new UnauthorizedException(
+        'Acceso no autorizado. Usuario no autenticado.',
+      );
     }
 
-    // Si el token es válido, devolvemos el usuario.
-    return user;
+    // Si existe el usuario, permitir acceso
+    return true;
   }
+
 }
