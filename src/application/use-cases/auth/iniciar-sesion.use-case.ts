@@ -1,27 +1,32 @@
 import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { IAccesoRepository } from '../../../domain/interfaces/acceso.repository.interface';
+import { IAlumnoDatosAcademicosRepository } from '../../../domain/interfaces/alumnos_datos_academicos.repository.interface';
 
 @Injectable()
 export class IniciarSesionUseCase {
 
   constructor(
-    // Aquí usamos el token de inyección
-    @Inject('IAccesoRepository')
-    private readonly accesoRepository: IAccesoRepository,
+    @Inject('IAlumnoDatosAcademicosRepository')
+    private readonly alumnoRepository: IAlumnoDatosAcademicosRepository,
     private readonly jwtService: JwtService,
   ) {}
 
-  async ejecutar (usuario: string, password: string,): Promise <{access_token: string}> {
-    const user = await this.accesoRepository.buscarPorUsuario(usuario);
+  async ejecutar(noControl: string, nip: string): Promise<{ access_token: string }> {
 
-    if (!user || user.contrasena !== password) {
+    const alumno = await this.alumnoRepository.buscarPorNoControl(noControl);
+
+    if (!alumno) {
+      throw new UnauthorizedException('Credenciales incorrectas');
+    }
+
+    if (!alumno.validarNip(Number(nip))) {
       throw new UnauthorizedException('Credenciales incorrectas');
     }
 
     const payload = {
-      sub: user.id,
-      usuario: user.usuario,
+      sub: alumno.id,
+      no_control: alumno.noControl,
+      usuario: alumno.usuario,
     };
 
     return {

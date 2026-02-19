@@ -1,37 +1,60 @@
-import { Module } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
+
 import { ConfigModule } from '@nestjs/config';
 
 // Módulos
 import { BdModule } from './infrastructure/modules/bd.module';
 import { AuthModule } from './infrastructure/security/auth/auth.module';
-import { AccesoModule } from './infrastructure/modules/acceso.module';
-
-// Controller de prueba
+import { AlumnoDatosAcademicosModule } from './infrastructure/modules/alumnos_datos_academicos.module';
+import { JwtMiddleware } from './infrastructure/security/auth/jwt.middleware';
 import { TestController } from './application/controllers/tests/test.controller';
 
 @Module({
   imports: [
-
-    // Variables de entorno
+    // Configuración global de variables de entorno
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
 
-    // Base de datos
+    // Módulo de base de datos
     BdModule,
 
-    // Acceso a datos
-    AccesoModule,
+    // Módulo de acceso a datos
+    AlumnoDatosAcademicosModule,
 
-    // Autenticación
+    // Módulo de autenticación
     AuthModule,
-
   ],
 
   controllers: [
-    TestController
+    TestController,
   ],
-
 })
-export class AppModule {}
+
+export class AppModule implements NestModule {
+  /**
+   * Protege todas las rutas EXCEPTO el login
+   */
+  configure(consumer: MiddlewareConsumer) {
+
+    consumer
+      .apply(JwtMiddleware)
+
+      // RUTA PÚBLICA (login)
+      .exclude(
+        {
+          path: 'auth/login',
+          method: RequestMethod.POST,
+        }
+      )
+
+      // TODAS las demás rutas protegidas
+      .forRoutes('*');
+  }
+}

@@ -5,7 +5,6 @@ import { Request } from 'express';
 @Controller('test')
 @UseGuards(JwtGuard)
 export class TestController {
-
   @Get()
   probar(@Req() req: Request) {
 
@@ -16,5 +15,4 @@ export class TestController {
       usuarioAutenticado: usuario
     };
   }
-
 }

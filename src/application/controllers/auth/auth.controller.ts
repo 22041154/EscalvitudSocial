@@ -5,9 +5,7 @@ import {
   HttpCode,
   HttpStatus
 } from '@nestjs/common';
-
 import { IniciarSesionUseCase } from '../../use-cases/auth/iniciar-sesion.use-case';
-
 import { IniciarSesionDto } from '../../../dtos/requests/iniciar-sesion.dto';
 
 @Controller('auth')
@@ -24,8 +22,8 @@ export class AuthController {
   ) {
 
     return this.iniciarSesionUseCase.ejecutar (
-      dto.usuario,
-      dto.contrasena
+      dto.no_control,
+      dto.nip
     );
   }
 }

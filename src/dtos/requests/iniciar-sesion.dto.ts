@@ -1,4 +1,4 @@
 export class IniciarSesionDto {
-  usuario: string;
-  contrasena: string;
+  no_control: string;
+  nip: string;
 }

@@ -3,11 +3,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from '../../../application/controllers/auth/auth.controller';
 import { IniciarSesionUseCase } from '../../../application/use-cases/auth/iniciar-sesion.use-case';
-import { AccesoModule } from '../../modules/acceso.module';
+import { AlumnoDatosAcademicosModule } from '../../modules/alumnos_datos_academicos.module';
 
 @Module({
   imports: [
-    AccesoModule,
+    AlumnoDatosAcademicosModule,
 
     JwtModule.registerAsync({
       global: true,
@@ -16,7 +16,7 @@ import { AccesoModule } from '../../modules/acceso.module';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: '3600s',
+          expiresIn: configService.get<string>('JWT_EXPIRATION') as any,
         },
       }),
     }),
