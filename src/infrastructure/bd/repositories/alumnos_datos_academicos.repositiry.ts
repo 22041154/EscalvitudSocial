@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { AlumnoDatosAcademicosEntity } from '../entities/alumnos_datos_academicos.entity';
 
 // Entity de dominio (modelo del negocio)
-import { AlumnoDatosAcademicos } from '../../../domain/entities/alumnos_datos_academicos.entity';
+import { AlumnoDatosAcademicos } from '../../../dtos/POCOS/alumnos_datos_academicos.entity';
 
 // Interfaz del repositorio (contrato del dominio)
 import { IAlumnoDatosAcademicosRepository } from '../../../domain/interfaces/alumnos_datos_academicos.repository.interface';
