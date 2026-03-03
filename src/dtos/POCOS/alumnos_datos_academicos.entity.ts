@@ -14,7 +14,7 @@ export class AlumnoDatosAcademicos {
     public readonly fechaActualizacion?: Date,
   ) {}
 
-  validarNip(nipIngresado: number): boolean {
+  ValidarNip(nipIngresado: number): boolean {
     return this.nip === nipIngresado;
   }
 }

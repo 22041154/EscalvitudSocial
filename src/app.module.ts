@@ -12,7 +12,6 @@ import { BdModule } from './infrastructure/modules/bd.module';
 import { AuthModule } from './infrastructure/security/auth/auth.module';
 import { AlumnoDatosAcademicosModule } from './infrastructure/modules/alumnos_datos_academicos.module';
 import { JwtMiddleware } from './infrastructure/security/auth/jwt.middleware';
-import { TestController } from './application/controllers/tests/test.controller';
 
 @Module({
   imports: [
@@ -33,7 +32,7 @@ import { TestController } from './application/controllers/tests/test.controller'
   ],
 
   controllers: [
-    TestController,
+    
   ],
 })
 

@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IAlumnoDatosAcademicosRepository } from '../../../domain/interfaces/alumnos_datos_academicos.repository.interface';
+import { LoginAlumnoResponse } from '../../../dtos/responses/auth/login_alumno.response';
 
 @Injectable()
 export class IniciarSesionUseCase {
@@ -11,16 +12,22 @@ export class IniciarSesionUseCase {
     private readonly jwtService: JwtService,
   ) {}
 
-  async ejecutar(noControl: string, nip: string): Promise<{ access_token: string }> {
+  async Ejecutar(noControl: string, nip: string): Promise<LoginAlumnoResponse> {
 
-    const alumno = await this.alumnoRepository.buscarPorNoControl(noControl);
+    const alumno = await this.alumnoRepository.BuscarPorNoControl(noControl);
 
     if (!alumno) {
       throw new UnauthorizedException('Credenciales incorrectas');
     }
 
-    if (!alumno.validarNip(Number(nip))) {
+    if (!alumno.ValidarNip(Number(nip))) {
       throw new UnauthorizedException('Credenciales incorrectas');
+    }
+
+    const datoLogin = await this.alumnoRepository.ObtenerDatosLoginPorNoControl(noControl);
+
+    if (!datoLogin) {
+      throw new UnauthorizedException('No se pudieron obtener los datos del alumno');
     }
 
     const payload = {
@@ -29,8 +36,9 @@ export class IniciarSesionUseCase {
       usuario: alumno.usuario,
     };
 
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    datoLogin.access_token = await this.jwtService.signAsync(payload);
+
+    return datoLogin;
   }
+
 }

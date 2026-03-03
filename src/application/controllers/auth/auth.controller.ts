@@ -20,8 +20,7 @@ export class AuthController {
   async signIn(
     @Body() dto: IniciarSesionDto
   ) {
-
-    return this.iniciarSesionUseCase.ejecutar (
+      return this.iniciarSesionUseCase.Ejecutar(
       dto.no_control,
       dto.nip
     );
