@@ -48,23 +48,24 @@ export class AlumnoDatosAcademicosRepository implements IAlumnoDatosAcademicosRe
         'carrera.id = academico.id_carrera'
       )
       .select([
-        'academico.no_control AS matricula',
-        'academico.creditos_aprobados AS creditos',
-        `CONCAT(personal.nombre, ' ', personal.apellido_paterno, ' ', personal.apellido_materno) AS nombre_completo`,
-        'carrera.nombre_completo AS carrera',
-      ])
+      'academico.no_control AS matricula',
+      'academico.creditos_aprobados AS creditos',
+      'academico.semestre AS semestre',
+      `CONCAT(personal.nombre, ' ', personal.apellido_paterno, ' ', personal.apellido_materno) AS nombre_completo`,
+      'carrera.nombre_completo AS carrera',
+    ])
       .where('academico.no_control = :noControl', { noControl })
       .getRawOne();
 
     if (!row) {
       return null;
     }
-
     return new DatosLoginAlumno(
       row.nombre_completo,
       row.matricula,
       Number(row.creditos),
       row.carrera,
+      Number(row.semestre),
     );
   }
 

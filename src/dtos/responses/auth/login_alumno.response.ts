@@ -7,8 +7,6 @@ export class LoginAlumnoResponse {
     matricula: string;
     creditos: number;
     carrera: string;
+    semestre_activo: boolean;
   };
-
-  access_token: string;
-
 }
